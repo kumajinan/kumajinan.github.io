@@ -1,0 +1,37 @@
+﻿<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>pomodoro</title>
+		<link rel="icon" href="img/favicon.ico">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="js/tinycon.js"></script>
+		<script>
+			var minute = 25;
+			var second = 0;
+			
+			(function(){
+				setInterval(function(){
+					updateTime();
+				}, 1000);
+			})();
+						
+			function updateTime() {
+				if (second == 0) {
+					--minute;
+					second = 60;
+				}
+				--second;
+				Tinycon.setBubble(minute);
+				
+				$('#minute').html(minute);
+				$('#second').html(second);
+			}
+			
+			
+		</script>
+	</head>
+	<body>
+		<span id="minute"></span>:
+		<span id="second"></span>
+	</body>
+</html>
