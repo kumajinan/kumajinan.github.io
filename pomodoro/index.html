@@ -5,16 +5,21 @@
 		<link rel="icon" href="img/favicon.ico">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 		<script src="js/tinycon.js"></script>
-		<script>
-			var minute = 25;
-			var second = 0;
-			
+		<script src="js/notify.js"></script>
+        <script>
+			var minute = 0;
+			var second = 25;
+
 			(function(){
 				setInterval(function(){
 					updateTime();
 				}, 1000);
 			})();
-						
+
+            /**
+            * カウントアップ処理
+            * ※1秒毎に呼びらされれる
+            **/
 			function updateTime() {
 				if (second == 0) {
 					--minute;
@@ -22,12 +27,27 @@
 				}
 				--second;
 				Tinycon.setBubble(minute);
-				
+
 				$('#minute').html(minute);
 				$('#second').html(second);
+
+                //時間終了時はnotificationを出す
+                if (minute == 0 && second == 0) {
+                    notification();
+                }
 			}
-			
-			
+
+            /**
+            * タイムアップ時のnotification
+            **/
+            function notification() {
+                var pomodoroNotification = new Notify('Pomodoro', {
+                body: 'This Pomodoro is Time Up',
+                icon: './img/tomato.png'
+                });
+                pomodoroNotification.show();
+            }
+
 		</script>
 	</head>
 	<body>
