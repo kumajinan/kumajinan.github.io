@@ -7,8 +7,16 @@
 		<script src="js/tinycon.js"></script>
 		<script src="js/notify.js"></script>
         <script>
-			var minute = 25;
-			var second = 0;
+            //初期パラメータ
+            var minute = 25;
+            var second = 0;
+            //Notificationの対応確認
+            if(!Notify.isSupported()) {
+                alert('Notificationに対応していないため利用できません');
+            }
+            if (Notify.needsPermission()) {
+                Notify.requestPermission();
+            }
 
 			(function(){
 				setInterval(function(){
@@ -43,7 +51,8 @@
             function notification() {
                 var pomodoroNotification = new Notify('Pomodoro', {
                 body: 'This Pomodoro is Time Up',
-                icon: './img/tomato.png'
+                icon: './img/tomato.png',
+                timeout:60
                 });
                 pomodoroNotification.show();
             }
