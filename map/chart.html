@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+<script src="https://www.google.com/jsapi"></script>
+<script>
+google.load('visualization', '1', {packages:['geochart']});
+google.setOnLoadCallback(graphChart);
+
+function graphChart() {
+  var data = google.visualization.arrayToDataTable([
+    ['都道府県', '人口'],
+    ['東京', 13159388],
+    ['大阪', 8865245],
+    ['神奈川',9048331],
+    ['愛知',7410719],
+    ['福岡',5071968],
+    ['北海道',5506419],
+    ['埼玉',7194556]
+  ]);
+ 
+  var option = {
+    region: 'JP',
+    resolution: 'provinces'
+  };
+ 
+  var graph = new google.visualization.GeoChart(document.getElementById('drawChart'));
+  graph.draw(data, option);
+}
+</script>
+</head>
+<body>
+<div id="drawChart">
+</div>
+</body>
+</html>
