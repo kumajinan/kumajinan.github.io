@@ -7,43 +7,51 @@
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
-var currentWindow = null;
-var googleMarkerList = new Array();
-var cnt = 0;
-var iconHash = {
+// 生成するgoogle mapの定義
+var MAP_MARKER_DEF = [
+    ['霧の里本館', 31.909971, 130.751707, 'hotel'],
+    ['さくらさくら温泉', 31.86237, 130.856838, 'spa'],
+    ['塩浸温泉', 31.834611, 130.744131 ,'spa'],
+    ['霧島鶏炭火焼　鳥茶屋',31.846737, 130.875667, 'food'],
+    ['霧島温泉市場',31.892781, 130.826636, 'food'],
+    ['霧島神宮',31.858100, 130.872534, 'gift'],
+    ['きりん商店',31.850730, 130.753502, 'gift'],
+    ['ＪＲ嘉例川駅',31.826700, 130.722719, 'sightseeing'],
+    ['丸尾自然探勝路',31.892880, 130.827100, 'sightseeing'],
+];
+// アイコンの定義
+var ICON_DEF = {
     "hotel": "http://maps.google.com/mapfiles/kml/pal3/icon21.png",
     "spa": "http://hotel.okitour.net/guidebook/images/icon_spa.png",
     "food": "http://hotel.okitour.net/guidebook/images/icon_restaurant.png",
     "gift": "http://hotel.okitour.net/guidebook/images/icon_gift.png",
     "sightseeing": "https://hotel.okitour.net/guidebook/images/icon_camera.png",
 };
+// google mapのズームレベル
+var MAP_CENTER_X = 31.892781;
+var MAP_CENTER_Y = 130.826636;
+var MAP_ZOOM_LEVEL = 11;
+
+// google mapを生成するロジック
+var currentWindow = null;
+var googleMarkerList = new Array();
+var cnt = 0;
 function initialize() {
     var myOptions = {
-        zoom: 11,
-        center: new google.maps.LatLng(31.892781,130.826636),
+        zoom: MAP_ZOOM_LEVEL,
+        center: new google.maps.LatLng(MAP_CENTER_X, MAP_CENTER_Y),
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     var map = new google.maps.Map(document.getElementById("map_canvas"),myOptions);
-    var markers = [
-        ['霧の里本館',31.909971,130.751707, 'hotel'],
-        ['さくらさくら温泉',31.86237, 130.856838, 'spa'],
-        ['塩浸温泉',31.834611, 130.744131 ,'spa'],
-        ['霧島鶏炭火焼　鳥茶屋',31.846737,130.875667, 'food'],
-        ['霧島温泉市場',31.892781,130.826636, 'food'],
-        ['霧島神宮',31.858100,130.872534, 'gift'],
-        ['きりん商店',31.850730,130.753502, 'gift'],
-        ['ＪＲ嘉例川駅',31.826700,130.722719, 'sightseeing'],
-        ['丸尾自然探勝路',31.892880,130.827100, 'sightseeing'],
-    ];
 
     // スポットを追加
     var elemMakerList = $('#marker-list');
-    for (var i = 0; i < markers.length; i++) {
+    for (var i = 0; i < MAP_MARKER_DEF.length; i++) {
+        var name = MAP_MARKER_DEF[i][0];
+        var latlng = new google.maps.LatLng(MAP_MARKER_DEF[i][1], MAP_MARKER_DEF[i][2]);
+        var iconName = MAP_MARKER_DEF[i][3];
+        var iconUrl = ICON_DEF[iconName];
         // googlemapのMarkerを追加
-        var name = markers[i][0];
-        var latlng = new google.maps.LatLng(markers[i][1],markers[i][2]);
-        var iconName = markers[i][3];
-        var iconUrl = iconHash[iconName];
         createMarker(name,latlng, iconUrl, map);
 
         // marker-listのul要素追加
@@ -56,6 +64,7 @@ function initialize() {
         google.maps.event.trigger(googleMarkerList[no], "click");
     });
 }
+// google mapにマーカーを追加
 function createMarker(name,latlng, iconUrl, map){
     var infoWindow = new google.maps.InfoWindow();
     var marker = new google.maps.Marker({position: latlng, icon:iconUrl, map: map});
